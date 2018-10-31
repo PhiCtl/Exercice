@@ -23,6 +23,8 @@ TEST(networkTest, connect) {
     EXPECT_FALSE(trylink);
     trylink = net.add_link(9,10);
     EXPECT_TRUE(trylink);
+    trylink = net.add_link(9,10);
+    EXPECT_FALSE(trylink);
     EXPECT_EQ(net.degree(9)+net.degree(10), 2);    
     trylink = net.add_link(9,8);
     trylink = net.add_link(1,9);
@@ -33,6 +35,7 @@ TEST(networkTest, connect) {
     for (int rep=0; rep<100; rep++) 
       numlink += 0.01*net.random_connect(2);
     EXPECT_NEAR(numlink, 200, 15);
+
 }
 
 TEST(networkTest, values) {

@@ -31,6 +31,11 @@ bool Network::add_link(const size_t& a, const size_t& b)
 size_t Network::random_connect(const double& mean_deg)
 	{
 		RandomNumbers Rn;
+		
+		multimap<size_t, size_t>::iterator it;
+		for(it = links.begin(); it !=links.end(); ++it)
+			{ links.erase(it);}
+		
 		links.clear();
 		
 		int nb_of_links(0);
@@ -69,8 +74,12 @@ bool already_nodes(multimap<size_t, size_t> map, const size_t& a, const size_t& 
 
 size_t Network::set_values(const vector<double>& tab)
 	{
-		values = tab;
-		return values.size();
+		for(size_t i(0); i < min(values.size(), tab.size()); ++i)
+			{
+				values[i] = tab[i];
+			}
+			
+		return (min(values.size(), tab.size()));
 
 	}
 
