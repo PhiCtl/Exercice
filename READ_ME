@@ -1,0 +1,57 @@
+READ_ME
+
+random connect :
+-> soit on crée en moyenne 2 liens par noeud en ne comptant que les liens bidirectionnels,
+ce qui nous fait un total de 200 liens créés pour 100 noeuds. En revanche, on ne respecte pas le degré n d'un noeud (qui sera conséquemment plus grand que 2)
+
+-> soit on tient compte du degré n pour chaque noeud et pour le noeud auquel il va être lié, donc on fait en moyenne 1 lien par noeud
+donc on créera bien moins de liens bidirectionnels (environ 100) car on compte les liens dans les deux sens cette fois-ci : 
+un lien entre A et B sera compté comme un lien pour A (degré de A est alors incrémenté de 1) et un lien pour B (idem pour le degré de B)
+Cependant, on risque de se retrouver dans le cas ou un noeud de degré >1 devra créer un lien avec un noeud de degré 0, et il n'aura pas dautre choix donc le programme tournera indefiniment.
+
+size_t Network::random_connect(const double& mean_deg)
+	{
+		links.clear();
+	
+		//initializes degrees
+		vector<int> degree_random (values.size());
+		for (auto& el : degree_random)
+			{
+				el = RNG.poisson(mean_deg);
+			}
+		
+		for(size_t n(0); n < values.size(); ++ n)
+			{
+				//substracts randomly chosen and effective degree
+				size_t i(0);
+				int diff(degree_random[n] - degree(n));				
+				
+				if(diff > 0)
+				{
+					
+					while( i < diff)
+						{ 
+							//nod to link
+							int to_link(RNG.uniform_double(0, values.size() -1));
+							
+							//if can be linked and (randomly chosen degree - effective degree > 0)
+							//makes link
+							if((degree_random[to_link] - degree(to_link)) > 0 && add_link(n, to_link))
+								{
+									++i; 
+									cout << "n : " << n << " " << degree_random[n] << " " << degree(n) << " " << diff << " " << i << endl;
+									cout << "to link :" << to_link << " " << degree_random[to_link] << " " << degree(to_link) << endl << endl;
+									cout << "links size" << links.size() /2 << endl;
+								}
+						}
+				}
+					
+			} 
+			
+		return links.size();
+			
+	}
+
+-> soit on ne prend en compte que le degree_n du noeud courant à lier, cela nous fait donc 1,5 fois plus de liens unidirectionnels. D'ou le 140-150 pour 200.
+Mais cela ne fait pas sens de ne pas prendre en compte les degree des noeuds liés (to link)
+			
