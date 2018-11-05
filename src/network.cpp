@@ -58,9 +58,6 @@ bool Network::add_link(const size_t& a, const size_t& b)
 							if((degree_random[to_link] - degree(to_link)) > 0 && add_link(n, to_link))
 								{
 									++i; 
-									cout << "n : " << n << " " << degree_random[n] << " " << degree(n) << " " << diff << " " << i << endl;
-									cout << "to link :" << to_link << " " << degree_random[to_link] << " " << degree(to_link) << endl << endl;
-									cout << "links size" << links.size() /2 << endl;
 								}
 						}
 				}
