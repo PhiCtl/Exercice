@@ -28,39 +28,80 @@ bool Network::add_link(const size_t& a, const size_t& b)
 		return true;
 	}
 
-size_t Network::random_connect(const double& mean_deg)
+/*size_t Network::random_connect(const double& mean_deg)
 	{
-		RandomNumbers Rn;
-		
-		multimap<size_t, size_t>::iterator it;
-		for(it = links.begin(); it !=links.end(); ++it)
-			{ links.erase(it);}
-		
 		links.clear();
-		
+	
+		//initializes degrees
+		vector<int> degree_random (values.size());
+		for (auto& el : degree_random)
+			{
+				el = RNG.poisson(mean_deg);
+			}
 		
 		for(size_t n(0); n < values.size(); ++ n)
 			{
-				
-				size_t degree_n(RNG.poisson(mean_deg));
+				//substracts randomly chosen and effective degree
 				size_t i(0);
-				int diff(degree_n - degree(n));
+				int diff(degree_random[n] - degree(n));				
 				
 				if(diff > 0)
 				{
-					vector<size_t> nodes_to_link;
-					RNG.uniform_int(nodes_to_link, 0, (values.size()-1));
+					
 					while( i < diff)
 						{ 
-							if(add_link(n, nod_to_link))
-								{ 
+							//nod to link
+							int to_link(RNG.uniform_double(0, values.size() -1));
+							
+							//if can be linked and (randomly chosen degree - effective degree > 0)
+							//makes link
+							if((degree_random[to_link] - degree(to_link)) > 0 && add_link(n, to_link))
+								{
 									++i; 
+									cout << "n : " << n << " " << degree_random[n] << " " << degree(n) << " " << diff << " " << i << endl;
+									cout << "to link :" << to_link << " " << degree_random[to_link] << " " << degree(to_link) << endl << endl;
+									cout << "links size" << links.size() /2 << endl;
 								}
 						}
 				}
-			}
-		return (links.size()/2);
 			
+					
+			} 
+			
+		return links.size();
+			
+	}*/
+	
+size_t Network::random_connect(const double& mean_deg)
+	{
+		links.clear();
+	
+		//initializes degrees
+		vector<int> degree_random (values.size());
+		for (auto& el : degree_random)
+			{
+				el = RNG.poisson(mean_deg);
+			}
+		
+		for(size_t n(0); n < values.size(); ++ n)
+			{
+				size_t i(0);
+					
+					while( i < degree_random[n])
+						{ 
+							//nod to link
+							int to_link(RNG.uniform_double(0, values.size() -1));
+							
+							if(add_link(n, to_link))
+								{
+									++i; 
+									
+								}
+						}
+				}
+		
+			
+		return links.size()/2;
 	}
 	
 bool already_nodes(multimap<size_t, size_t> map, const size_t& a, const size_t& b)
