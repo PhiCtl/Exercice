@@ -42,17 +42,16 @@ size_t Network::random_connect(const double& mean_deg)
 		for(size_t n(0); n < values.size(); ++ n)
 			{
 				
-				size_t degree_n(Rn.poisson(mean_deg));
+				size_t degree_n(RNG.poisson(mean_deg));
 				size_t i(0);
 				int diff(degree_n - degree(n));
 				
 				if(diff > 0)
 				{
-				
+					vector<size_t> nodes_to_link;
+					RNG.uniform_int(nodes_to_link, 0, (values.size()-1));
 					while( i < diff)
 						{ 
-							size_t nod_to_link(Rn.uniform_double(0, values.size()-1));
-							
 							if(add_link(n, nod_to_link))
 								{ 
 									++i; 
