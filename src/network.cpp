@@ -72,19 +72,13 @@ bool Network::add_link(const size_t& a, const size_t& b)
 size_t Network::random_connect(const double& mean_deg)
 	{
 		links.clear();
-	
-		//initializes degrees
-		vector<int> degree_random (values.size());
-		for (auto& el : degree_random)
-			{
-				el = RNG.poisson(mean_deg);
-			}
 		
 		for(size_t n(0); n < values.size(); ++ n)
 			{
 				size_t i(0);
+				size_t degree_n (RNG.poisson(mean_deg));
 					
-					while( i < degree_random[n])
+					while( i < degree_n)
 						{ 
 							//nod to link
 							int to_link(RNG.uniform_double(0, values.size() -1));
